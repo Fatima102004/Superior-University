@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>NASA App</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+	</head>
+	<body>
+		<header>
+			<h1>NASA Explorer</h1>
+			<p>APOD (Astronomy Picture of the Day) and Mars Rover latest photos</p>
+		</header>
+
+		<main>
+			<section id="apod">
+				<h2>Astronomy Picture of the Day</h2>
+				<div class="controls">
+					<label for="apod-date">Pick a date:</label>
+					<input id="apod-date" type="date" />
+					<button id="apod-load">Load</button>
+					<button id="apod-today">Today</button>
+				</div>
+
+				<div id="apod-content">
+					{% if apod.error %}
+						<div class="error">Error: {{ apod.error }}</div>
+					{% else %}
+						<h3>{{ apod.title }}</h3>
+						<p class="apod-date">{{ apod.date }}</p>
+						{% if apod.media_type == 'video' %}
+							<div class="media">
+								<iframe src="{{ apod.url }}" frameborder="0" allowfullscreen></iframe>
+							</div>
+						{% else %}
+							<div class="media">
+								<img src="{{ apod.url }}" alt="{{ apod.title }}" />
+							</div>
+						{% endif %}
+						<p class="explain">{{ apod.explanation }}</p>
+					{% endif %}
+				</div>
+			</section>
+
+			<section id="mars">
+				<h2>Mars Rover - Latest Photos</h2>
+				<div class="controls">
+					<label for="rover-select">Rover:</label>
+					<select id="rover-select">
+						<option value="curiosity">Curiosity</option>
+						<option value="opportunity">Opportunity</option>
+						<option value="spirit">Spirit</option>
+					</select>
+					<button id="mars-load">Refresh</button>
+				</div>
+
+				<div id="mars-gallery">
+					{% if mars_photos %}
+						{% for p in mars_photos %}
+							<figure class="mars-item">
+								<img src="{{ p.img_src }}" alt="Mars photo {{ loop.index }}" />
+								<figcaption>{{ p.rover.name }} - {{ p.camera.full_name }} (Sol {{ p.sol }})</figcaption>
+							</figure>
+						{% endfor %}
+					{% else %}
+						<p>No Mars photos available right now.</p>
+					{% endif %}
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<small>Using NASA open APIs. API Key: {{ 'Provided' if api_key and api_key != 'DEMO_KEY' else 'DEMO_KEY (rate-limited)' }}.</small>
+		</footer>
+
+		<script src="{{ url_for('static', filename='script.js') }}"></script>
+	</body>
+</html>

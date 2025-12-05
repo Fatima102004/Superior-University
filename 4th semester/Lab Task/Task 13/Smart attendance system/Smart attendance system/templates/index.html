@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="header-title">📸 Smart Attendance System</h1>
+                <p class="header-subtitle">AI-Powered Face Recognition Attendance</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="live-feed">
+                    <span class="tab-icon">📹</span>
+                    Live Feed
+                </button>
+                <button class="tab-btn" data-tab="register">
+                    <span class="tab-icon">➕</span>
+                    Register Face
+                </button>
+                <button class="tab-btn" data-tab="attendance">
+                    <span class="tab-icon">📊</span>
+                    Attendance Log
+                </button>
+            </div>
+
+            <div class="tabs-content">
+                <div id="live-feed" class="tab-content active">
+                    <div class="live-feed-container">
+                        <div class="video-controls" style="margin-bottom: 15px; text-align: center;">
+                            <button id="toggleCameraBtn" class="btn btn-primary" style="min-width: 160px;">
+                                <span class="btn-icon">🛑</span> Stop Camera
+                            </button>
+                        </div>
+                        
+                        <div class="video-wrapper">
+                            <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Video Feed" class="video-stream">
+                            
+                            <div id="cameraPlaceholder" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; background-color: #000; color: #fff; flex-direction: column;">
+                                <span style="font-size: 3rem;">📷</span>
+                                <h3 style="margin-top: 10px;">Camera is Paused</h3>
+                            </div>
+                        </div>
+
+                        <div class="feed-info">
+                            <div class="info-card">
+                                <div class="info-label">Registered Faces</div>
+                                <div class="info-value" id="registeredCount">0</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-label">Today's Attendance</div>
+                                <div class="info-value" id="attendanceCount">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="register" class="tab-content">
+                    <div class="register-container">
+                        <div class="register-form-wrapper">
+                            <h2 class="form-title">Register New Face</h2>
+                            <form id="registerForm" class="register-form">
+                                <div class="form-group">
+                                    <label for="personName" class="form-label">Person Name</label>
+                                    <input 
+                                        type="text" 
+                                        id="personName" 
+                                        name="name" 
+                                        class="form-input" 
+                                        placeholder="Enter full name"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="faceImage" class="form-label">Upload Photo</label>
+                                    <div class="file-input-wrapper">
+                                        <input 
+                                            type="file" 
+                                            id="faceImage" 
+                                            name="file" 
+                                            class="file-input" 
+                                            accept="image/*"
+                                            required
+                                        >
+                                        <label for="faceImage" class="file-label">
+                                            <span class="file-icon">📁</span>
+                                            <span class="file-text">Choose Photo or Drag & Drop</span>
+                                        </label>
+                                        <div id="imagePreview" class="image-preview">
+                                            <img id="previewImg" src="" alt="Preview" style="display: none;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="btn-icon">✓</span>
+                                    Register Face
+                                </button>
+                            </form>
+
+                            <div id="registerStatus" class="status-message" style="display: none;"></div>
+                        </div>
+
+                        <div class="registered-list">
+                            <h2 class="form-title">Registered Persons</h2>
+                            <div id="registeredList" class="persons-list">
+                                <p class="empty-message">No registered faces yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="attendance" class="tab-content">
+                    <div class="attendance-container">
+                        <div class="attendance-header">
+                            <h2>Attendance Records</h2>
+                            <div class="attendance-actions">
+                                <button id="refreshBtn" class="btn btn-secondary">
+                                    <span class="btn-icon">🔄</span>
+                                    Refresh
+                                </button>
+                                <button id="clearBtn" class="btn btn-danger">
+                                    <span class="btn-icon">🗑️</span>
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="attendance-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Total Present</span>
+                                <span class="stat-value" id="totalPresent">0</span>
+                            </div>
+                        </div>
+
+                        <div class="attendance-table-wrapper">
+                            <table class="attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Check-in Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceTableBody">
+                                    <tr class="empty-row">
+                                        <td colspan="4">No attendance records yet</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="download-section">
+                            <button id="downloadBtn" class="btn btn-success">
+                                <span class="btn-icon">⬇️</span>
+                                Download CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Smart Attendance System. Powered by Flask & OpenCV</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+Sibling-Safe Face Recognition System
+
+A high-precision Face Recognition Attendance System built with Flask and OpenCV Deep Learning.
+
+This project is specifically engineered to solve the "Sibling Challenge" (distinguishing between brothers/sisters with similar facial structures) by utilizing SFace (Sigmoid-constrained Hypersphere Loss) instead of traditional methods like Haar Cascades or LBPH.
+
+🚀 Key Features
+
+Deep Learning Accuracy: Uses YuNet for detection and SFace for recognition (99%+ accuracy on LFW benchmark).
+
+Sibling differentiation: Uses a tuned Cosine Similarity Threshold (0.50) to strictly separate similar faces.
+
+Real-Time Processing: Low-latency video feed using ONNX runtime.
+
+Attendance Logging: Automatically logs recognized users with a timestamp.
+
+📂 Project Structure
+
+app.py: Main Flask application and AI logic.
+
+yunet.onnx: The Face Detection Model (Finds the face).
+
+face_recognition_sface_2021dec.onnx: The Face Recognition Model (Identifies the person).
+
+uploads/: Stores the raw reference images for registered users.
+
+features.pkl: Stores the computed 128-D mathematical embeddings (auto-generated).
+
+🛠️ Installation & Setup
+
+1. Install Dependencies
+
+Make sure you have Python installed. Run the following command to install the required libraries:
+
+pip install -r requirements.txt
+
+
+2. Verify Model Files
+
+Ensure the following two files are present in the project root directory (same folder as app.py). These are required for the AI to function:
+
+yunet.onnx
+
+face_recognition_sface_2021dec.onnx
+
+3. Run the Application
+
+Start the server by running:
+
+python app.py
+
+
+Access the application in your web browser at:
+http://127.0.0.1:5000
+
+🧠 How Sibling Detection Works
+
+Standard face recognition libraries often use a distance threshold of 0.6 (Euclidean) or 0.36 (Cosine). While this works for strangers, it often fails for siblings, classifying them as the same person.
+
+To fix this, this project implements a Strict Cosine Similarity Threshold:
+
+Standard Match: > 0.363
+
+Sibling Safe Match: > 0.50
+
+The variable SIBLING_THRESHOLD = 0.50 in app.py ensures that the system only confirms an identity if the biometric match is extremely close, effectively rejecting false positives caused by family resemblance.
+
+📝 Usage
+
+Register: Go to the "Register New Face" section, upload a clear photo, and enter a name.
+
+Recognize: Go to the "Live Feed". The system will draw a Green box for confirmed matches and a Red box for Unknowns.
+
+Attendance: Recognized faces are automatically added to the attendance log below the video.
+
+⚠️ Troubleshooting
+
+"CRITICAL ERROR: Could not find .onnx file":
+
+Ensure yunet.onnx and face_recognition_sface_2021dec.onnx are in the main folder, not inside a subfolder.
+
+System confusing siblings?
+
+Open app.py and increase SIBLING_THRESHOLD from 0.50 to 0.55.

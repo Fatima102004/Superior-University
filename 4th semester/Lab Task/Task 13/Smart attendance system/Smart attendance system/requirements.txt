@@ -1,0 +1,4 @@
+flask
+numpy
+opencv-python>=4.6.0
+requests

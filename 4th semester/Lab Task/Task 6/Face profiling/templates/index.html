@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Face Profiling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <h1 class="title">Face Profiling</h1>
+        <p class="subtitle">Analyze facial features and personality insights</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card upload-section">
+        <h2>Upload Your Photo</h2>
+        <p class="description">Select a clear frontal face image for accurate analysis</p>
+        <div class="uploader">
+          <label for="fileInput" class="file-label">
+            <span class="file-icon">📷</span>
+            <span id="fileName">Choose image or drag here</span>
+            <input id="fileInput" type="file" accept="image/*" />
+          </label>
+          <button id="analyzeBtn" class="btn btn-primary">Analyze</button>
+        </div>
+      </section>
+
+      <section id="previewSection" class="card preview-section" style="display:none;">
+        <h2>Image Preview & Landmarks</h2>
+        <canvas id="canvas"></canvas>
+      </section>
+
+      <section id="resultsSection" class="card results-section" style="display:none;">
+        <h2>Analysis Results</h2>
+        <div id="results" class="results"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2025 Face Profiling Tool | Built with OpenCV</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>

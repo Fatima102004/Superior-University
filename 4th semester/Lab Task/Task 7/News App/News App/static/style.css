@@ -1,0 +1,26 @@
+body {
+    background-color: #f4f7f6;
+}
+
+.news-card {
+    transition: transform 0.2s;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+}
+
+.source-tag {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-title {
+    font-weight: 700;
+    color: #2c3e50;
+}
